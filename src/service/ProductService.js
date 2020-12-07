@@ -5,6 +5,16 @@ class ProductService {
         return http.get("/products");
     }
 
+    getAllComplex(pPerPage, pageNr, searchTerm, sortDirection) {
+        let extra = `?name=${searchTerm}&sort=price,${sortDirection}`;
+        return http.get("/products" + extra, {
+            headers: {
+                "Page-Number" : pageNr,
+                "Page-Size" : 4,
+            }
+        });
+    }
+
     getById(id) {
         return http.get(`/products/${id}`);
     }
