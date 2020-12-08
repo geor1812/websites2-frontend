@@ -83,7 +83,7 @@ class AddProduct extends Component {
 
     render() {
         return (
-            <div className="container container-sm">
+            <div className="container bg-secondary container-sm">
                 {
                     this.state.message !== "" ?
                         (<div className="row-cols-1 pt-3 text-center">

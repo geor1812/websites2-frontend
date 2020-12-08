@@ -14,7 +14,7 @@ class App extends Component {
       return (
           <Router>
             <Navbar />
-            <div className="container-fluid h-100 bg-secondary">
+            <div className="container-fluid h-100 bg-dark">
                 <Switch>
                     <Route
                         exact path={["/", "/products"]}

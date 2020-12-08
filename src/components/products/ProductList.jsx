@@ -9,8 +9,16 @@ class ProductList extends Component {
 
         this.getProducts = this.getProducts.bind(this);
         this.deleteProduct = this.deleteProduct.bind(this);
+        this.getProductsComplex = this.getProductsComplex.bind(this);
+        this.onChangeSearchTerm = this.onChangeSearchTerm.bind(this);
+        this.onChangeSortingDirection = this.onChangeSortingDirection.bind(this);
+        this.search = this.search.bind(this);
 
         this.state = {
+            searchTerm : "",
+            currentPage: 0,
+            totalPages : 0,
+            sortDirection : "asc",
             products: [],
             message: ""
         }
@@ -30,8 +38,45 @@ class ProductList extends Component {
             })
     }
 
+    //Retreiving products with pagination, filtering and sorting
+    getProductsComplex(pPerPage, pageNr, searchTerm, sortDirection) {
+        ProductService.getAllComplex(pPerPage, pageNr, searchTerm, sortDirection)
+            .then(response => {
+                this.setState({
+                    searchTerm: searchTerm,
+                    products: response.data,
+                    currentPage: pageNr,
+                    sortDirection: sortDirection,
+                    totalPages: response.headers['Page-Total']
+                })
+                console.log(response.data);
+            })
+            .catch(e => {
+                console.log(e);
+            })
+    }
+
     componentDidMount() {
-        this.getProducts();
+       // this.getProducts();
+        this.getProductsComplex(4,0, this.state.searchTerm, this.state.sortDirection);
+    }
+
+    search() {
+        this.getProductsComplex(4,0,this.state.searchTerm, this.state.sortDirection);
+    }
+
+    onChangeSearchTerm(e) {
+        const newSearchTerm = e.target.value;
+        this.setState({
+            searchTerm:  newSearchTerm,
+        });
+    }
+
+    onChangeSortingDirection(e) {
+        const newSortingDirection = e.target.value;
+        this.setState({
+            sortDirection:  newSortingDirection,
+        });
     }
 
     deleteProduct(id) {
@@ -54,10 +99,27 @@ class ProductList extends Component {
         this.getProducts();
     }
 
+
+
     render() {
         const products = this.state.products;
         return (
-            <div className="container-fluid" >
+            <div className="container-fluid bg-secondary" >
+                <div className="row-cols-1">
+                    <nav className="navbar navbar-dark bg-dark">
+                        <form className="form-inline" onSubmit={(e => e.preventDefault())}>
+                            <input className="form-control mr-sm-2" type="search" placeholder="Search"
+                                   aria-label="Search" onChange={this.onChangeSearchTerm}/>
+
+                                <select className="form-control mr-sm-2" id="productsPerPage" onChange={this.onChangeSortingDirection}>
+                                    <option value="">Sort price</option>
+                                    <option value="asc">Asc</option>
+                                    <option value="desc">Desc</option>
+                                </select>
+                                <button className="btn btn-outline-danger my-2 my-sm-0" onClick={this.search} type="submit">Search</button>
+                        </form>
+                    </nav>
+                </div>
                 {
                     this.state.message !== "" ?
                         (<div className="row-cols-1 pt-3 text-center">
@@ -68,10 +130,10 @@ class ProductList extends Component {
                             console.log("No delete")
                         )
                 }
-                <div className="row-cols-1 pt-5 mb-2 text-center">
+                <div className="row-cols-1 pt-1 mb-2 text-center">
                     <Link
                         to={"/products/add"}
-                        className="btn btn-dark btn-lg text-center"
+                        className="btn btn-dark btn-outline-danger btn-lg text-center"
                     >
                         Add a product
                     </Link>
