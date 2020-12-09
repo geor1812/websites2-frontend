@@ -7,8 +7,12 @@ import Navbar from "./components/Navbar";
 import ProductList from "./components/products/ProductList";
 import AddProduct from "./components/products/AddProduct";
 import EditProduct from "./components/products/EditProduct";
+import BuyProduct from "./components/products/BuyProduct";
 
 class App extends Component {
+    state = {
+        customerId : null
+    }
   render() {
       console.log(process.env.REACT_APP_NAME);
       return (
@@ -29,6 +33,11 @@ class App extends Component {
                     <Route
                         exact path="/products/:id"
                         component={EditProduct}
+                    />
+                    <Route
+                        exact path="/buy/:id"
+                        component={BuyProduct}
+                        //render={props => <BuyProduct {...props} />}
                     />
                 </Switch>
             </div>
