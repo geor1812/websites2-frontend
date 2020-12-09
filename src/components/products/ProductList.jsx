@@ -13,6 +13,7 @@ class ProductList extends Component {
         this.onChangeSearchTerm = this.onChangeSearchTerm.bind(this);
         this.onChangeSortingDirection = this.onChangeSortingDirection.bind(this);
         this.search = this.search.bind(this);
+        this.changePage = this.changePage.bind(this);
 
         this.state = {
             searchTerm : "",
@@ -47,13 +48,19 @@ class ProductList extends Component {
                     products: response.data,
                     currentPage: pageNr,
                     sortDirection: sortDirection,
-                    totalPages: response.headers['Page-Total']
+                    totalPages: response.headers["page-total"]
                 })
                 console.log(response.data);
+                console.log(response.headers);
             })
             .catch(e => {
                 console.log(e);
             })
+    }
+
+    changePage(increment) {
+        this.getProductsComplex(4, this.state.currentPage + increment,
+            this.state.searchTerm, this.state.sortDirection);
     }
 
     componentDidMount() {
@@ -104,7 +111,7 @@ class ProductList extends Component {
     render() {
         const products = this.state.products;
         return (
-            <div className="container-fluid bg-secondary" >
+            <div className="container-fluid bg-secondary p-0" >
                 <div className="row-cols-1">
                     <nav className="navbar navbar-dark bg-dark">
                         <form className="form-inline" onSubmit={(e => e.preventDefault())}>
@@ -116,7 +123,25 @@ class ProductList extends Component {
                                     <option value="asc">Asc</option>
                                     <option value="desc">Desc</option>
                                 </select>
-                                <button className="btn btn-outline-danger my-2 my-sm-0" onClick={this.search} type="submit">Search</button>
+                                <button className="btn btn-outline-danger mr-sm-2" onClick={this.search} type="submit">Search</button>
+
+                                <button
+                                    className="btn btn-outline-danger mr-sm-2"
+                                    type="button"
+                                    onClick={() => this.changePage(-1)}
+                                    disabled={this.state.currentPage === 0 ? ("disabled") : ("")}
+                                >
+                                    Previous
+                                </button>
+                                <h5><span className="badge badge-secondary mr-sm-2">{`${this.state.currentPage + 1} of ${this.state.totalPages}`}</span></h5>
+                                <button
+                                    className="btn btn-outline-danger mr-sm-2"
+                                    type="button"
+                                    disabled={this.state.currentPage < this.state.totalPages - 1 ? ("") : ("disabled")}
+                                    onClick={() => this.changePage(1)}
+                                >
+                                    Next
+                                </button>
                         </form>
                     </nav>
                 </div>
