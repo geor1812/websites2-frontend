@@ -164,7 +164,7 @@ class ProductList extends Component {
                     </Link>
                 </div>
                 <div className="row d-flex">
-                    <div className="col-md-auto">
+                    <div className="col-md-auto mx-auto">
                         <ul className="list-unstyled row">
                             {products.map((product) => {
                                 return <div key={product.id} className="card my-5 list-item mx-auto" style={{width: "35rem"}}>
