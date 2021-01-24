@@ -190,7 +190,6 @@ class ProductList extends Component {
                                                     this.deleteProduct(product.id);
                                                 }}>Delete
                                         </button>
-
                                     </div>
                                 </div>
                             })}
